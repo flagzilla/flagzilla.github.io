@@ -531,7 +531,17 @@
     transform: scale(1) !important;
 }
 
+     /* ВСТАВЛЯЕМ СЮДА: Делаем шрифт рекордов компактным на экранах Айфонов */
+     .quiz-stats {
+         font-size: 14px !important;
+         font-weight: 600 !important;
+         color: #495057 !important;
+         letter-spacing: 0.3px !important;
+     }
+
 } /* 🌟 ГЛАВНАЯ СКОБКА: Намертво и правильно закрывает весь мобильный режим @media */
+
+
     
      
     </style>
@@ -593,6 +603,7 @@
 <div id="flagModal" class="flag-modal" onclick="closeFlagModal()">
     <img id="flagModalImg" class="flag-modal-img" src="" alt="Крупный флаг" style="background-color: transparent !important;">
 </div>
+
 
 <script>
 const specialFlags = {
@@ -1302,6 +1313,8 @@ function loadQuizFlagRound() {
         btn.onclick = () => checkFlagAnswer(btn, c.name);
         container.appendChild(btn);
     });
+    const bestFlag = localStorage.getItem('highScore_flags') || 0;
+    document.getElementById('quizFlagStats').innerHTML = `🏆 Рекорд: ${bestFlag} &nbsp;|&nbsp; 🎯 Очки: ${flagScore} &nbsp;|&nbsp; 📋 Раунд: ${flagRound}`;
 }
 function checkFlagAnswer(selectedBtn, chosenName) {
     document.querySelectorAll('#quizFlagOptions .option-btn').forEach(b => b.disabled = true);
@@ -1314,7 +1327,14 @@ function checkFlagAnswer(selectedBtn, chosenName) {
             if(b.innerHTML.startsWith(currentFlagTarget.name)) b.classList.add('correct');
         });
     }
-    document.getElementById('quizFlagStats').textContent = `Очки: ${flagScore} | Раунд: ${flagRound++}`;
+/* ЗАМЕНИЛИ СТРОЧКУ НА ЭТОТ ИГРОВОЙ БЛОК АВТОСОХРАНЕНИЯ РЕКОРДА: */
+    let bestFlag = localStorage.getItem('highScore_flags') || 0;
+    if (flagScore > bestFlag) {
+        localStorage.setItem('highScore_flags', flagScore);
+        bestFlag = flagScore;
+    }
+    document.getElementById('quizFlagStats').innerHTML = `🏆 Рекорд: ${bestFlag} &nbsp;|&nbsp; 🎯 Очки: ${flagScore} &nbsp;|&nbsp; 📋 Раунд: ${flagRound++}`;
+
     document.getElementById('nextFlagBtn').style.display = 'inline-block';
 }
 
