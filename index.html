@@ -500,10 +500,9 @@
          font-size: 15px !important;
      }
 
-/* 🌟 МОДАЛЬНОЕ ОКНО ДЛЯ ПОЛНОЭКРАННОГО ФЛАГА С БЛОКИРОВКОЙ СКРОЛЛА И СДВИГОВ: */
+/* 🌟 МОДАЛЬНОЕ ОКНО ДЛЯ ПОЛНОЭКРАННОГО ФЛАГА С ПОЛНОЙ БЛОКИРОВКОЙ ОБВОДОК */
 .flag-modal {
     position: fixed;
-    /* Намертво привязываем окно по углам дисплея без создания скрытых правых хвостов: */
     inset: 0px !important;
     background-color: rgba(0, 0, 0, 0.9) !important; /* Глубокое красивое затемнение */
     display: none; 
@@ -513,11 +512,21 @@
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
     cursor: pointer;
+    
+    /* УНИЧТОЖАЕМ ЛЮБЫЕ СИСТЕМНЫЕ СЕРЫЕ ЛИНИИ КОНТЕЙНЕРА В SAFARI: */
+    border: none !important;
+    border-width: 0px !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 .flag-modal.open {
     display: flex !important;
     opacity: 1 !important;
+    /* Повторно дублируем защиту от рамок при открытии: */
+    border: none !important;
+    outline: none !important;
 }
+
 .flag-modal-img {
     max-width: 92% !important;
     max-height: 75% !important;
