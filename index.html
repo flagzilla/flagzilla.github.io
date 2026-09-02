@@ -1393,11 +1393,21 @@ function checkCountryAnswer(selectedBtn, chosenName) {
     document.getElementById('quizCountryStats').textContent = `Очки: ${countryScore} | Раунд: ${countryRound++}`;
     document.getElementById('nextCountryBtn').style.display = 'inline-block';
 }
-/* НЕУБИВАЕМАЯ БЛОКИРОВКА СДВИГОВ И ОТКРЫТИЕ ФЛАГА */
 function openFlagModal(imgSrc) {
     const modal = document.getElementById('flagModal');
     const modalImg = document.getElementById('flagModalImg');
     modalImg.src = imgSrc;
+    
+    /* 🌟 НАША СВЕРХТОЧНАЯ ЗАЩИТА НЕПАЛА НА ВЕСЬ ЭКРАН: */
+    /* Если в адресе картинки есть код Непала, растворяем его белый прямоугольный хвост */
+    if (imgSrc.includes('NP.svg') || imgSrc.includes('np.svg')) {
+        modalImg.style.mixBlendMode = 'multiply';
+        modalImg.style.backgroundColor = 'transparent';
+    } else {
+        // Для всех остальных стран возвращаем обычный чистый режим
+        modalImg.style.mixBlendMode = 'normal';
+        modalImg.style.backgroundColor = '';
+    }
     
     // Замораживаем страницу от любых боковых сдвигов жестами в Safari
     document.body.style.overflow = 'hidden';
@@ -1405,6 +1415,7 @@ function openFlagModal(imgSrc) {
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('open'), 10);
 }
+
 
 function closeFlagModal() {
     const modal = document.getElementById('flagModal');
