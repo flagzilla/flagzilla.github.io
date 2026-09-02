@@ -500,18 +500,18 @@
          font-size: 15px !important;
      }
 
-/* 🌟 ЖЕЛЕЗНЫЙ МОБИЛЬНЫЙ ЩИТ ДЛЯ ПОЛНОЭКРАННЫХ ФЛАГОВ */
+/* 🌟 ГРАФИТОВЫЙ МОБИЛЬНЫЙ ЩИТ С ЗАЩИТОЙ ТЕМНЫХ ПОЛОС */
 .flag-modal {
     position: fixed;
-    top: -5px !important;    /* Сдвиг на 5 пикселей наружу намертво прячет системную рамку Safari за край экрана */
+    top: -5px !important;    
     left: -5px !important;
     right: -5px !important;
     bottom: -5px !important;
-    background-color: #000000 !important; /* Наглухо красим подложку в черный цвет */
+    background-color: #1a1a1a !important; /* Насыщенный темно-серый цвет разделяет темные полосы флагов */
     display: none; 
     align-items: center;
     justify-content: center;
-    z-index: 9999 !important; /* Абсолютный приоритет поверх всего */
+    z-index: 9999 !important; 
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
     cursor: pointer;
@@ -527,16 +527,20 @@
     max-width: 95% !important;
     max-height: 75% !important;
     object-fit: contain !important;
-    border: none !important;
-    border-width: 0px !important;
-    border-style: none !important;
     outline: none !important;
-    box-shadow: none !important; /* Полностью стираем тень, которая создавала серый ореол на iOS */
     transform: scale(0.95);
     transition: transform 0.2s ease-in-out;
+    
+    /* ТОНЧАЙШАЯ СВЕТЛАЯ ЛИНИЯ-ОБВОДКА: Отделяет края Ирака/Иордании от фона страницы */
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
 }
 
-
+/* ИСКЛЮЧЕНИЕ ДЛЯ НЕПАЛА: На треугольном Непале эта обводка должна полностью исчезать! */
+.flag-modal-img[src*="NP.svg"], .flag-modal-img[src*="np.svg"] {
+    border: none !important;
+    box-shadow: none !important;
+}
 
 .flag-modal.open .flag-modal-img {
     transform: scale(1) !important;
