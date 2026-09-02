@@ -500,47 +500,42 @@
          font-size: 15px !important;
      }
 
-/* 🌟 МОДАЛЬНОЕ ОКНО ДЛЯ ПОЛНОЭКРАННОГО ФЛАГА С ПОЛНОЙ БЛОКИРОВКОЙ ОБВОДОК */
+/* 🌟 ЖЕЛЕЗНЫЙ МОБИЛЬНЫЙ ЩИТ ДЛЯ ПОЛНОЭКРАННЫХ ФЛАГОВ */
 .flag-modal {
     position: fixed;
-    inset: 0px !important;
-    background-color: rgba(0, 0, 0, 0.9) !important; /* Глубокое красивое затемнение */
+    top: -5px !important;    /* Сдвиг на 5 пикселей наружу намертво прячет системную рамку Safari за край экрана */
+    left: -5px !important;
+    right: -5px !important;
+    bottom: -5px !important;
+    background-color: #000000 !important; /* Наглухо красим подложку в черный цвет */
     display: none; 
     align-items: center;
     justify-content: center;
-    z-index: 4000 !important; /* Железно перекрывает шапку и весь интерфейс */
+    z-index: 9999 !important; /* Абсолютный приоритет поверх всего */
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
     cursor: pointer;
-    
-    /* УНИЧТОЖАЕМ ЛЮБЫЕ СИСТЕМНЫЕ СЕРЫЕ ЛИНИИ КОНТЕЙНЕРА В SAFARI: */
     border: none !important;
-    border-width: 0px !important;
     outline: none !important;
     box-shadow: none !important;
 }
 .flag-modal.open {
     display: flex !important;
     opacity: 1 !important;
-    /* Повторно дублируем защиту от рамок при открытии: */
+}
+.flag-modal-img {
+    max-width: 95% !important;
+    max-height: 75% !important;
+    object-fit: contain !important;
     border: none !important;
+    border-width: 0px !important;
+    border-style: none !important;
     outline: none !important;
+    box-shadow: none !important; /* Полностью стираем тень, которая создавала серый ореол на iOS */
+    transform: scale(0.95);
+    transition: transform 0.2s ease-in-out;
 }
 
-.flag-modal-img {
-    max-width: 92% !important;
-    max-height: 75% !important;
-    object-fit: contain !important; /* Нативно сохраняет оригинальную форму Википедии */
-    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-    border-radius: 4px;
-    transform: scale(0.92);
-    transition: transform 0.2s ease-in-out;
-    
-    /* 🌟 НАШ ГЛАВНЫЙ СТИРАТЕЛЬ СИСТЕМНЫХ РАМОК SAFARI: */
-    border: 0px solid transparent !important; /* Полностью обнуляем базовую границу */
-    border-style: none !important;
-    outline: none !important;                 /* Стираем техническую обводку alt-текста */
-}
 
 
 .flag-modal.open .flag-modal-img {
@@ -1435,24 +1430,17 @@ function openFlagModal(imgSrc) {
     const modalImg = document.getElementById('flagModalImg');
     modalImg.src = imgSrc;
     
-    /* 🌟 НАША НЕУБИВАЕМАЯ ГЕОМЕТРИЧЕСКАЯ ЗАЩИТА НЕПАЛА НА ВЕСЬ ЭКРАН */
+    /* 🌟 УЛЬТИМАТИВНЫЙ ПЕРЕХВАТ СТИЛЕЙ ПОД SAFARI IOS */
     if (imgSrc.includes('NP.svg') || imgSrc.includes('np.svg')) {
-        // Намертво вырезаем треугольный контур Непала, убирая белые углы Википедии копейка в копейку
-        modalImg.style.setProperty('clip-path', 'polygon(0% 0%, 100% 0%, 100% 49.3%, 47% 49.3%, 100% 49.3%, 100% 100%, 0% 100%)', 'important');
+        // Для Непала: чисто растворяем белую коробку Википедии прямо в черном фоне окна
+        modalImg.style.setProperty('mix-blend-mode', 'multiply', 'important');
         modalImg.style.setProperty('background-color', 'transparent', 'important');
-        modalImg.style.setProperty('mix-blend-mode', 'normal', 'important');
-        // Убираем рамку и тень, так как треугольник должен быть чистым
-        modalImg.style.setProperty('border', 'none', 'important');
-        modalImg.style.setProperty('box-shadow', 'none', 'important');
-    } else {
-        // Для всех остальных прямоугольных стран мира (Казахстан, Франция)
         modalImg.style.setProperty('clip-path', 'none', 'important');
-        // Обнуляем цвет подложки, чтобы убрать белые боковые уши у вытянутых флагов
-        modalImg.style.setProperty('background-color', 'transparent', 'important');
+    } else {
+        // Для всех остальных стран: убираем белые боковые уши фона и возвращаем нормальный режим полотна
         modalImg.style.setProperty('mix-blend-mode', 'normal', 'important');
-        // Возвращаем аккуратную тонкую обводку и мягкую тень строго на ткань флага
-        modalImg.style.setProperty('border', '1px solid rgba(255,255,255,0.2)', 'important');
-        modalImg.style.setProperty('box-shadow', '0 10px 40px rgba(0,0,0,0.5)', 'important');
+        modalImg.style.setProperty('background-color', 'transparent', 'important');
+        modalImg.style.setProperty('clip-path', 'none', 'important');
     }
     
     // Замораживаем страницу от любых боковых сдвигов жестами в Safari
@@ -1461,8 +1449,6 @@ function openFlagModal(imgSrc) {
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('open'), 10);
 }
-
-
 
 
 function closeFlagModal() {
