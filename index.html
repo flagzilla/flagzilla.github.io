@@ -1420,17 +1420,21 @@ function openFlagModal(imgSrc) {
     const modalImg = document.getElementById('flagModalImg');
     modalImg.src = imgSrc;
     
-    /* 🌟 НАША НЕУБИВАЕМАЯ ЗАЩИТА НЕПАЛА ПОД SAFARI IOS */
+    /* 🌟 НАША АБСОЛЮТНАЯ И НЕУБИВАЕМАЯ ЗАЩИТА НЕПАЛА НА ВЕСЬ ЭКРАН */
     if (imgSrc.includes('NP.svg') || imgSrc.includes('np.svg')) {
-        // Запись через setProperty принудительно заставляет Айфон обрезать пустые поля по контуру
-        modalImg.style.setProperty('clip-path', 'polygon(0% 0%, 100% 0%, 100% 49.3%, 47% 49.3%, 100% 49.3%, 100% 100%, 0% 100%)', 'important');
+        // Намертво стираем серую рамку и тень у картинки, чтобы они физически не могли просвечивать
+        modalImg.style.setProperty('border', 'none', 'important');
+        modalImg.style.setProperty('box-shadow', 'none', 'important');
+        modalImg.style.setProperty('background-color', 'transparent', 'important');
+        modalImg.style.setProperty('mix-blend-mode', 'multiply', 'important'); // Чисто растворяем белые поля Википедии в фоне
+        modalImg.style.setProperty('clip-path', 'none', 'important'); // Снимаем капризный clip-path
+    } else {
+        // Для всех остальных прямоугольных стран мира (Япония, Ватикан, Франция) возвращаем плотный контур
+        modalImg.style.setProperty('border', '1px solid rgba(0,0,0,0.1)', 'important');
+        modalImg.style.setProperty('box-shadow', '0 4px 8px rgba(0,0,0,0.1)', 'important');
         modalImg.style.setProperty('background-color', '#ffffff', 'important');
         modalImg.style.setProperty('mix-blend-mode', 'normal', 'important');
-    } else {
-        // Для всех остальных прямоугольных стран мира возвращаем стандартный режим
         modalImg.style.setProperty('clip-path', 'none', 'important');
-        modalImg.style.setProperty('background-color', 'transparent', 'important');
-        modalImg.style.setProperty('mix-blend-mode', 'normal', 'important');
     }
     
     // Замораживаем страницу от любых боковых сдвигов жестами в Safari
@@ -1439,6 +1443,7 @@ function openFlagModal(imgSrc) {
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('open'), 10);
 }
+
 
 
 function closeFlagModal() {
