@@ -527,11 +527,7 @@
     transform: scale(0.92);
     transition: transform 0.2s ease-in-out;
 }
-.flag-modal-img[src*="NP.svg"], .flag-modal-img[src*="np.svg"] {
-clip-path: polygon(0% 0%, 100% 0%, 100% 49.3%, 47% 49.3%, 100% 49.3%, 100% 100%, 0% 100%) !important;
 
-    background-color: #ffffff !important; /* Плотный белый цвет перекрывает серые кнопки сзади */
-}
 .flag-modal.open .flag-modal-img {
     transform: scale(1) !important;
 }
@@ -1424,15 +1420,18 @@ function openFlagModal(imgSrc) {
     const modalImg = document.getElementById('flagModalImg');
     modalImg.src = imgSrc;
     
-    /* 🌟 НАША СВЕРХТОЧНАЯ ЗАЩИТА НЕПАЛА НА ВЕСЬ ЭКРАН: */
-    /* Если в адресе картинки есть код Непала, растворяем его белый прямоугольный хвост */
+    /* 🌟 НАША НЕУБИВАЕМАЯ СИНХРОННАЯ ЗАЩИТА НЕПАЛА НА ВЕСЬ ЭКРАН */
     if (imgSrc.includes('NP.svg') || imgSrc.includes('np.svg')) {
-        modalImg.style.mixBlendMode = 'multiply';
-        modalImg.style.backgroundColor = 'transparent';
-    } else {
-        // Для всех остальных стран возвращаем обычный чистый режим
+        // Железно вырезаем треугольный контур по пикселям синей рамки флага
+        modalImg.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 49.3%, 47% 49.3%, 100% 49.3%, 100% 100%, 0% 100%)';
+        // Плотная белоснежная подложка наглухо перекрывает серые кнопки квиза сзади
+        modalImg.style.backgroundColor = '#ffffff';
         modalImg.style.mixBlendMode = 'normal';
-        modalImg.style.backgroundColor = '';
+    } else {
+        // Для всех остальных прямоугольных стран мира возвращаем чистый стандартный режим
+        modalImg.style.clipPath = 'none';
+        modalImg.style.backgroundColor = 'transparent';
+        modalImg.style.mixBlendMode = 'normal';
     }
     
     // Замораживаем страницу от любых боковых сдвигов жестами в Safari
@@ -1441,7 +1440,6 @@ function openFlagModal(imgSrc) {
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('open'), 10);
 }
-
 
 function closeFlagModal() {
     const modal = document.getElementById('flagModal');
