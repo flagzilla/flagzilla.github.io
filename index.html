@@ -527,6 +527,11 @@
     transform: scale(0.92);
     transition: transform 0.2s ease-in-out;
 }
+.flag-modal-img[src*="NP.svg"], .flag-modal-img[src*="np.svg"] {
+clip-path: polygon(0% 0%, 100% 0%, 100% 49.3%, 47% 49.3%, 100% 49.3%, 100% 100%, 0% 100%) !important;
+
+    background-color: #ffffff !important; /* Плотный белый цвет перекрывает серые кнопки сзади */
+}
 .flag-modal.open .flag-modal-img {
     transform: scale(1) !important;
 }
@@ -601,8 +606,9 @@
 
 <!-- Контейнер для полноэкранного просмотра флага -->
 <div id="flagModal" class="flag-modal" onclick="closeFlagModal()">
-    <img id="flagModalImg" class="flag-modal-img" src="" alt="Крупный флаг" style="background-color: transparent !important;">
+    <img id="flagModalImg" class="flag-modal-img" src="" alt="Крупный флаг">
 </div>
+
 
 
 <script>
