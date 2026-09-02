@@ -526,7 +526,13 @@
     border-radius: 4px;
     transform: scale(0.92);
     transition: transform 0.2s ease-in-out;
+    
+    /* 🌟 НАШ ГЛАВНЫЙ СТИРАТЕЛЬ СИСТЕМНЫХ РАМОК SAFARI: */
+    border: 0px solid transparent !important; /* Полностью обнуляем базовую границу */
+    border-style: none !important;
+    outline: none !important;                 /* Стираем техническую обводку alt-текста */
 }
+
 
 .flag-modal.open .flag-modal-img {
     transform: scale(1) !important;
