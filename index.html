@@ -1420,21 +1420,24 @@ function openFlagModal(imgSrc) {
     const modalImg = document.getElementById('flagModalImg');
     modalImg.src = imgSrc;
     
-    /* 🌟 НАША АБСОЛЮТНАЯ И НЕУБИВАЕМАЯ ЗАЩИТА НЕПАЛА НА ВЕСЬ ЭКРАН */
+    /* 🌟 НАША НЕУБИВАЕМАЯ ГЕОМЕТРИЧЕСКАЯ ЗАЩИТА НЕПАЛА НА ВЕСЬ ЭКРАН */
     if (imgSrc.includes('NP.svg') || imgSrc.includes('np.svg')) {
-        // Намертво стираем серую рамку и тень у картинки, чтобы они физически не могли просвечивать
+        // Намертво вырезаем треугольный контур Непала, убирая белые углы Википедии копейка в копейку
+        modalImg.style.setProperty('clip-path', 'polygon(0% 0%, 100% 0%, 100% 49.3%, 47% 49.3%, 100% 49.3%, 100% 100%, 0% 100%)', 'important');
+        modalImg.style.setProperty('background-color', 'transparent', 'important');
+        modalImg.style.setProperty('mix-blend-mode', 'normal', 'important');
+        // Убираем рамку и тень, так как треугольник должен быть чистым
         modalImg.style.setProperty('border', 'none', 'important');
         modalImg.style.setProperty('box-shadow', 'none', 'important');
-        modalImg.style.setProperty('background-color', 'transparent', 'important');
-        modalImg.style.setProperty('mix-blend-mode', 'multiply', 'important'); // Чисто растворяем белые поля Википедии в фоне
-        modalImg.style.setProperty('clip-path', 'none', 'important'); // Снимаем капризный clip-path
     } else {
-        // Для всех остальных прямоугольных стран мира (Япония, Ватикан, Франция) возвращаем плотный контур
-        modalImg.style.setProperty('border', '1px solid rgba(0,0,0,0.1)', 'important');
-        modalImg.style.setProperty('box-shadow', '0 4px 8px rgba(0,0,0,0.1)', 'important');
-        modalImg.style.setProperty('background-color', '#ffffff', 'important');
-        modalImg.style.setProperty('mix-blend-mode', 'normal', 'important');
+        // Для всех остальных прямоугольных стран мира (Казахстан, Франция)
         modalImg.style.setProperty('clip-path', 'none', 'important');
+        // Обнуляем цвет подложки, чтобы убрать белые боковые уши у вытянутых флагов
+        modalImg.style.setProperty('background-color', 'transparent', 'important');
+        modalImg.style.setProperty('mix-blend-mode', 'normal', 'important');
+        // Возвращаем аккуратную тонкую обводку и мягкую тень строго на ткань флага
+        modalImg.style.setProperty('border', '1px solid rgba(255,255,255,0.2)', 'important');
+        modalImg.style.setProperty('box-shadow', '0 10px 40px rgba(0,0,0,0.5)', 'important');
     }
     
     // Замораживаем страницу от любых боковых сдвигов жестами в Safari
@@ -1443,6 +1446,7 @@ function openFlagModal(imgSrc) {
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('open'), 10);
 }
+
 
 
 
