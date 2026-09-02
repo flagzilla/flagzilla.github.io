@@ -1420,18 +1420,17 @@ function openFlagModal(imgSrc) {
     const modalImg = document.getElementById('flagModalImg');
     modalImg.src = imgSrc;
     
-    /* 🌟 НАША НЕУБИВАЕМАЯ СИНХРОННАЯ ЗАЩИТА НЕПАЛА НА ВЕСЬ ЭКРАН */
+    /* 🌟 НАША НЕУБИВАЕМАЯ ЗАЩИТА НЕПАЛА ПОД SAFARI IOS */
     if (imgSrc.includes('NP.svg') || imgSrc.includes('np.svg')) {
-        // Железно вырезаем треугольный контур по пикселям синей рамки флага
-        modalImg.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 49.3%, 47% 49.3%, 100% 49.3%, 100% 100%, 0% 100%)';
-        // Плотная белоснежная подложка наглухо перекрывает серые кнопки квиза сзади
-        modalImg.style.backgroundColor = '#ffffff';
-        modalImg.style.mixBlendMode = 'normal';
+        // Запись через setProperty принудительно заставляет Айфон обрезать пустые поля по контуру
+        modalImg.style.setProperty('clip-path', 'polygon(0% 0%, 100% 0%, 100% 49.3%, 47% 49.3%, 100% 49.3%, 100% 100%, 0% 100%)', 'important');
+        modalImg.style.setProperty('background-color', '#ffffff', 'important');
+        modalImg.style.setProperty('mix-blend-mode', 'normal', 'important');
     } else {
-        // Для всех остальных прямоугольных стран мира возвращаем чистый стандартный режим
-        modalImg.style.clipPath = 'none';
-        modalImg.style.backgroundColor = 'transparent';
-        modalImg.style.mixBlendMode = 'normal';
+        // Для всех остальных прямоугольных стран мира возвращаем стандартный режим
+        modalImg.style.setProperty('clip-path', 'none', 'important');
+        modalImg.style.setProperty('background-color', 'transparent', 'important');
+        modalImg.style.setProperty('mix-blend-mode', 'normal', 'important');
     }
     
     // Замораживаем страницу от любых боковых сдвигов жестами в Safari
@@ -1440,6 +1439,7 @@ function openFlagModal(imgSrc) {
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('open'), 10);
 }
+
 
 function closeFlagModal() {
     const modal = document.getElementById('flagModal');
