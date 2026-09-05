@@ -339,25 +339,27 @@
         }
         .scroll-top-btn {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #212529;
-            color: white;
-            border: none;
+            bottom: 25px;
+            right: 25px;
+            width: 40px;
+            height: 40px;
+            background: none !important;      /* Намертво стираем черный круглый фон */
+            /* 🌟 ТОНКАЯ СЕРАЯ СТРЕЛКА: благородный цвет с легкой прозрачностью */
+            color: rgba(0, 0, 0, 0.3) !important; 
+            border: none !important;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 24px !important;       /* Сделали саму стрелочку чуть крупнее и аккуратнее */
+            font-weight: 300 !important;
             display: none;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            transition: opacity 0.2s;
+            box-shadow: none !important;      /* Полностью убрали громоздкую тень */
+            transition: color 0.2s;
             z-index: 999;
+            -webkit-tap-highlight-color: transparent; /* Убираем серый квадрат при тапе на Айфоне */
         }
         .scroll-top-btn:hover {
-            background-color: #000000;
+            color: rgba(0, 0, 0, 0.6) !important; /* При наведении становится чуть отчетливее */
         }
 @media (max-width: 600px) {
      /* 🌟 СЕТКА ШАПКИ: Растягиваем каркас кнопок пиксель в пиксель по ширине поиска */
@@ -425,52 +427,66 @@
      }
 
 
-     /* 1. Возвращаем монолитную жесткую сетку таблиц */
-     /* 🌟 ОТОДВИГАЕМ ТЕКСТ ОТ КРАЕВ ЭКРАНА И СТИРАЕМ БОКОВЫЕ РАМКИ КАРТОЧКИ: */
      .continent-content {
-           /* 🌟 ПРИЖАЛИ СЕТКУ ВЛЕВО: убрали боковые отступы (0px вместо 12px) */
+           /* 🌟 ЛИНИИ И ШАПКА СПАСЕНЫ: убрали отступы контента, вернув линии от края до края */
            padding: 0px 0px 8px 0px !important; 
            background-color: #ffffff !important;
      }
 
-     /* 1. Возвращаем монолитную жесткую сетку таблиц */
+     .continent-content {
+           /* Возвращаем чистые нулевые поля контента, чтобы линии шли строго от края до края экрана дисплея */
+           padding: 0px 0px 8px 0px !important; 
+           background-color: #ffffff !important;
+     }
+
+     /* 1. Возвращаем монолитную жесткую сетку таблиц с красивыми ровными линиями */
      table {
-           width: 100% !important;
+           width: 100% !important; 
            table-layout: fixed !important; 
            border-collapse: collapse !important;
-           border: none !important; /* 🌟 Полное удаление внешней рамки таблицы */
+           border: none !important; 
+           box-sizing: border-box !important;
+           /* 🌟 СИММЕТРИЯ ЛИНИЙ: вернули ровное поле 12px для идеального баланса краев */
+           padding-left: 12px !important; 
      }
+
      th {
            text-align: left !important;
            border-bottom: 2px solid var(--border-color) !important;
      }
 
-
-     /* 2. Задаем строгие мобильные доли колонок и выравнивание заголовков */
+     /* 2. ЮВЕЛИРНЫЙ МОБИЛЬНЫЙ БАЛАНС: Колонки и отступы безопасности */
      .col-flag {
-            width: 85px !important;        
-            padding: 10px 0px !important;   
+            /* 🌟 ПРИЖИМАЕМ К КРАЮ: Уменьшили отступ слева с 12px до 4px, чтобы Катар встал впритирку к стеклу */
+            width: 108px !important;        
+            padding: 10px 0px 10px 4px !important;   
+            box-sizing: border-box !important;
      }
-     /* Отдельно центрируем заголовок «Флаг» в шапке таблицы */
+
      th.col-flag {
             text-align: center !important;
      }
      
      td:nth-child(2) {
-            width: 48% !important;         
-            padding-left: 15px !important; /* Родной отступ ткани флага от букв страны */
+            /* Выделили под страны комфортные 52%, чтобы названия букв дышали */
+            width: 52% !important;         
+            /* 🌟 ЮВЕЛИРНОЕ ПРИБЛИЖЕНИЕ: придвинули текст ближе к флагам на долю миллиметра */
+            padding-left: 4px !important; 
             padding-right: 5px !important;
      }
-     /* Выравниваем заголовок «Страна» строго по первой букве названий стран */
+
      th:nth-child(3) {
             text-align: left !important;
-            padding-left: 15px !important; /* Жестко повторяем отступ 15px, чтобы буквы встали по линеечке! */
+            padding-left: 4px !important; 
      }
 
      td:nth-child(3) {
-            width: 32% !important;         /* Столица заперта в границах и не вылетает */
-            padding-left: 5px !important;
+            /* Оптимизировали ширину столиц, отдав свободную площадь названиям стран */
+            width: 24% !important;         
+            /* 🌟 ЮВЕЛИРНОЕ ПРИБЛИЖЕНИЕ: притянули столицы ближе к стране на долю миллиметра */
+            padding-left: 2px !important;
      }
+
      th, td {
             padding: 10px 2px !important;
             vertical-align: middle !important;
@@ -478,13 +494,12 @@
             word-wrap: break-word !important;
             overflow-wrap: break-word !important;
             
-            /* 🌟 УЛЬТИМАТИВНАЯ ЗАЧИСТКА БОКОВЫХ РАМОК: */
-            border-left: none !important;   /* Намертво стираем границу таблицы слева */
-            border-right: none !important;  /* Намертво стираем границу таблицы справа */
-            border-top: none !important;    /* Убираем верхние обводки */
-            border-bottom: 1px solid var(--border-color) !important; /* ОСТАВЛЯЕМ ТОЛЬКО ЛИНИИ МЕЖДУ СТРАНАМИ */
+            border-left: none !important;   
+            border-right: none !important;  
+            border-top: none !important;    
+            border-bottom: 1px solid var(--border-color) !important; 
      }
-     /* 🌟 НАМЕРТВО УБИРАЕМ ЛИНИЮ ПОД САМОЙ ПОСЛЕДНЕЙ СТРАНОЙ В ТАБЛИЦЕ: */
+
      table tbody tr:last-child td {
             border-bottom: none !important;
      }
@@ -497,28 +512,44 @@
             font-size: 14px !important;
      }
 
-     /* 3. НАСТРОЙКА ФЛАГОВ ПО УМОЛЧАНИЮ: Честные пропорции, одинаковая высота */
+     /* 3. НАСТРОЙКА ФЛАГОВ: Выравнивание всех флагов по центру относительно Катара */
      .flag-wrapper {
-           width: 85px !important;         /* Стандартный контейнер */
-           height: 44px !important;        /* Фиксированная высота для идеального масштаба всего ряда */
+           /* 🌟 ЦЕНТРИРОВАНИЕ ПО КАТАРУ: Заперли контейнер в 100px (максимальная длина Катара) */
+           width: 100px !important;         
+           height: 42px !important; 
            display: inline-flex !important;
            align-items: center !important;
+           /* 🌟 Намертво выравниваем все короткие флаги строго по центру контейнера Катара */
            justify-content: center !important; 
+           overflow: visible !important;
      }
+
      .flag-img {
-           height: 100% !important;        /* Картинка заполняет рамку строго по высоте */
-           width: auto !important;         /* Ширина пропорционально растягивается сама */
-           object-fit: contain !important; /* Сохраняет истинные пропорции без белых полей */
+           height: 100% !important;        
+           width: auto !important;         
+           /* 🌟 РОДНЫЕ ПРОПОРЦИИ НАМЕРТВО: Родная ткань флагов без искажений и белых краев */
+           object-fit: contain !important; 
            border-radius: 2px !important;
+           box-shadow: 0 1px 4px rgba(0,0,0,0.15) !important;
+           border: 1px solid rgba(0,0,0,0.08) !important;
+           box-sizing: border-box !important;
+           margin-left: 0px !important;
+           margin-right: 0px !important;
      }
 
      /* 🌟 НАШ ПЕРСОНАЛЬНЫЙ ХАК ДЛЯ КАТАРА: */
-     /* Освобождаем Катар от ограничений и разрешаем ему вытянуться вправо поверх отступа страны */
      .flag-img[src*="QA.svg"], .flag-img[src*="qa.svg"], .flag-img[alt*="Катар"] {
-           max-width: none !important;     /* Снимаем блокировку Википедии */
-           width: 115px !important;        /* Вытягиваем его во всю законную супер-длину */
-           object-fit: fill !important;
+           max-width: none !important;     
+           margin-left: 0px !important;    
+           margin-right: 0px !important;   
+           /* 🌟 Занимает ровно весь 100px контейнер ячейки, рамка горит, наезд исключен! */
+           width: 100px !important;        
+           height: 42px !important; 
+           object-fit: fill !important; 
      }
+
+
+
 
      /* КВИЗЫ: Положение на мобильном */
      .view-section:not(#dbView) {
@@ -626,7 +657,6 @@
          font-weight: 600 !important;
          color: #495057 !important;
          letter-spacing: 0.3px !important;
-     }
 
 } /* 🌟 ГЛАВНАЯ СКОБКА: Намертво и правильно закрывает весь мобильный режим @media */
 
@@ -1112,7 +1142,7 @@ const countriesData = {
         { name: "Науру", capital: "Ярен", iso: "nr", special: true },
         { name: "Новая Зеландия", capital: "Веллингтон", iso: "nz", special: true },
         { name: "Палау", capital: "Нгерулмуд", iso: "pw", special: true },
-        { name: "Папуа — Новая Гвинея", capital: "Порт-Морсби", iso: "pg", special: true },
+        { name: "Папуа-Новая Гвинея", capital: "Порт-Морсби", iso: "pg", special: true },
         { name: "Самоа", capital: "Апиа", iso: "ws", special: true },
         { name: "Соломоновы Острова", capital: "Хониара", iso: "sb", special: true },
         { name: "Тонга", capital: "Нукуалофа", iso: "to", special: true },
