@@ -641,13 +641,14 @@
     left: -5px !important;
     right: -5px !important;
     bottom: -5px !important;
-    background-color: #1a1a1a !important; /* Насыщенный темно-серый цвет разделяет темные полосы флагов */
+    background-color: #1a1a1a !important; 
     display: none; 
     align-items: center;
     justify-content: center;
     z-index: 9999 !important; 
     opacity: 0;
-    transition: opacity 0.2s ease-in-out;
+    /* 🌟 СВЕРХСКОРОСТЬ: окно исчезает за рекордные 0.05 секунды */
+    transition: opacity 0.05s ease-in-out !important;
     cursor: pointer;
     border: none !important;
     outline: none !important;
@@ -657,6 +658,19 @@
     display: flex !important;
     opacity: 1 !important;
 }
+
+/* 🌟 КЛАСС ДЛЯ МГНОВЕННОЙ И ЧИСТОЙ ПОДВЕТКИ КОНТЕНТА */
+.site-fade {
+    opacity: 0 !important;
+    pointer-events: none !important; 
+    transition: opacity 0.05s ease-in-out !important;
+}
+.fixed-header, .container {
+    /* 🌟 СКОРОСТЬ САЙТА: списки возвращаются на экран мгновенно и без зависаний */
+    transition: opacity 0.05s ease-in-out !important;
+}
+
+
 /* 🌟 МОБИЛЬНАЯ КАРТИНКА: ТОТАЛЬНОЕ ОБНУЛЕНИЕ ВСЕХ КОНТУРОВ И ТЕНЕЙ SAFARI */
 .flag-modal-img {
     max-width: 95% !important;
@@ -1711,37 +1725,40 @@ function openFlagModal(imgSrc) {
     modalImg.style.setProperty('box-shadow', 'none', 'important');
     modalImg.style.setProperty('clip-path', 'none', 'important');
     
-    /* 🌟 ЗАПОМИНАЕМ ТОЧНУЮ ПОЗИЦИЮ СКРОЛЛА ПЕРЕД ЗАКРЫТИЕМ КОНТЕНЕРА */
-    lastScrollPosition = window.scrollY;
-    
     document.body.style.overflow = 'hidden';
     
     modal.style.display = 'flex';
     setTimeout(() => {
         modal.classList.add('open');
+        /* 🌟 ПРАВИЛЬНОЕ СКРЫТИЕ: Мягко гасим прозрачность сайта, чтобы он не просвечивал под панелью Safari */
         const header = document.querySelector('.fixed-header');
         const container = document.querySelector('.container');
-        if (header) header.style.setProperty('display', 'none', 'important');
-        if (container) container.style.setProperty('display', 'none', 'important');
+        if (header) header.classList.add('site-fade');
+        if (container) container.classList.add('site-fade');
     }, 10);
 }
 
 function closeFlagModal() {
     const modal = document.getElementById('flagModal');
+    /* 🌟 МОЛНИЕНОСНЫЙ КЛИК: Мгновенно убираем класс открытия флага */
     modal.classList.remove('open');
+    
+    /* 🌟 МОЛНИЕНОСНЫЙ ВОЗВРАТ: Сразу возвращаем списки стран и шапку на экран без пауз */
+    const header = document.querySelector('.fixed-header');
+    const container = document.querySelector('.container');
+    if (header) header.classList.remove('site-fade');
+    if (container) container.classList.remove('site-fade');
     
     document.body.style.overflow = '';
     
-    const header = document.querySelector('.fixed-header');
-    const container = document.querySelector('.container');
-    if (header) header.style.setProperty('display', 'block', 'important');
-    if (container) container.style.setProperty('display', 'block', 'important');
-    
-    /* 🌟 СВЕРХТОЧНЫЙ ВОЗВРАТ: Мгновенно возвращаем скролл Айфона ровно на то место, где был нажат флаг */
-    window.scrollTo(0, lastScrollPosition);
-    
-    setTimeout(() => modal.style.display = 'none', 200);
+    /* Спустя 50мс чисто гасим саму флекс-подложку */
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 50); 
 }
+
+
+
 
 
 </script>
