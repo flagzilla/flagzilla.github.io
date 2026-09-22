@@ -277,22 +277,18 @@
             box-sizing: border-box;
         }
         
-      .flag-img[src*="/CH.svg"], 
-        .flag-img[src*="Austria"], 
-        .flag-img[src*="Andorra"], 
-        .flag-img[src*="Belarus"] {
-            border: none !important;
-            box-shadow: none !important;
-        }
-        /* ВЫНЕСЛИ НЕПАЛ В ОТДЕЛЬНОЕ НЕУБИВАЕМОЕ ПРАВИЛО: */
-        .flag-img[src*="/NP.svg"], .flag-img[src*="np.svg"], .flag-img[alt*="Непал"] {
-            mix-blend-mode: multiply !important;
-            border: none !important;
-            box-shadow: none !important;
-            background: transparent !important;
-        }
+/* 🌟 ЧЕТКИЙ КОНТУР И ОБЪЕМНАЯ ТЕНЬ ДЛЯ НЕПАЛА */
+.flag-img[src*="/NP.svg"], .flag-img[src*="np.svg"], .flag-img[alt*="Непал"] {
+    mix-blend-mode: multiply !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    /* 1-й слой делает четкий ровный контур вокруг треугольников, 2-й — мягкую тень под флагом */
+    filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.35)) 
+            drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.15)) !important;
+}
 
-        
+       
         tr.hidden { display: none; }
         .count-badge {
             background: #6c757d;
@@ -339,15 +335,7 @@
             box-sizing: border-box;
             background-color: #ffffff;    /* Защитный слой для белых элементов флагов */
         }
-
-
-        
-        /* Защита Швейцарии от рамок (Ватикан отсюда убрали, чтобы вернуть ему контур) */
-        .quiz-flag-img[src*="/CH.svg"] {
-            border: none !important;
-            box-shadow: none !important;
-        }
-
+     
         /* Персональная очистка Непала для квизов на ПК */
         .quiz-flag-img[src*="/NP.svg"], .quiz-flag-img[src*="np.svg"] {
             border: none !important;
@@ -582,8 +570,7 @@
      .flag-img {
            height: 100% !important;        
            width: auto !important;         
-           /* 🌟 РОДНЫЕ ПРОПОРЦИИ НАМЕРТВО: Родная ткань флагов без искажений и белых краев */
-           object-fit: contain !important; 
+           object-fit: cover !important;
            border-radius: 2px !important;
            box-shadow: 0 1px 4px rgba(0,0,0,0.15) !important;
            border: 1px solid rgba(0,0,0,0.08) !important;
@@ -602,6 +589,51 @@
            height: 42px !important; 
            object-fit: fill !important; 
      }
+/* 🌟 1. ДЛЯ ВЛАДИКАВКАЗА: чистая контурная тень */
+.flag-img[src*="North_Ossetia"],
+.flag-img[alt*="Владикавказ"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    filter: drop-shadow(0px 1px 3px rgba(0,0,0,0.15)) !important;
+}
+
+/* 🌟 2. ДЛЯ ЧЕРКЕССКА И МУРМАНСКА: ювелирная рамка 1px + мягкая тень строго по форме ГЕРБА-ЩИТА */
+.flag-img[src*="Cherkessia"], 
+.flag-img[src*="Cherkessk"], 
+.flag-img[alt*="Черкесск"],
+.flag-img[src*="Murmansk"],
+.flag-img[alt*="Мурманск"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    /* 1 слой создает тонкий и четкий серый кант 1px вокруг герба, 2 слой — мягкую аккуратную тень */
+    filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.35)) 
+            drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.15)) !important;
+}
+
+/* 🌟 ЧЕТКИЙ КОНТУР И ОБЪЕМНАЯ ТЕНЬ ДЛЯ ИРКУТСКА */
+.flag-img[src*="Irkutsk"], .flag-img[alt*="Иркутск"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    /* Даем Иркутску точно такой же идеальный баланс рамки и объема */
+    filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.35)) 
+            drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.15)) !important;
+}
+
+
+/* Полностью очищаем фон ячеек-контейнеров для всей четверки */
+tr[data-name*="черкесск"] .flag-wrapper,
+tr[data-name*="мурманск"] .flag-wrapper,
+tr[data-name*="владикавказ"] .flag-wrapper,
+tr[data-name*="иркутск"] .flag-wrapper {
+    background-color: transparent !important;
+    background: transparent !important;
+}
 
      /* КВИЗЫ: Положение на мобильном */
      .view-section:not(#dbView) {
@@ -731,6 +763,19 @@
          color: #495057 !important;
          letter-spacing: 0.3px !important;
      } 
+
+     /* 🌟 ТОТАЛЬНОЕ УНИЧТОЖЕНИЕ ПРЯМОУГОЛЬНОЙ РАМКИ НЕПАЛА В КВИЗЕ НА МОБИЛЬНЫХ */
+     .quiz-flag-img[src*="NP.svg"], 
+     .quiz-flag-img[src*="np.svg"], 
+     .quiz-flag-img[alt*="Непал"] {
+         border: none !important;
+         border-width: 0px !important;
+         box-shadow: none !important;
+         background-color: transparent !important;
+         /* Рисуем рамку и тень СТРОГО по форме треугольников: */
+         filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.35)) 
+                 drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.15)) !important;
+     }
 
 } /* 🌟 ГЛАВНАЯ СКОБКА: Намертво и правильно закрывает весь мобильный режим @media */
 
@@ -1227,7 +1272,7 @@ const cityFlags = {
     "Магас": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Flag_of_Magas.svg",
     "Нальчик": "https://upload.wikimedia.org/wikipedia/commons/7/70/Flag_of_Nalchik_%28Kabardino-Balkaria%29.png",
     "Элиста": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Flag_of_Elista_%28Kalmykia%29.svg/1280px-Flag_of_Elista_%28Kalmykia%29.svg.png",
-    "Черкесск": "https://upload.wikimedia.org/wikipedia/commons/5/59/Flag_of_Karachay-Cherkessia.svg",
+    "Черкесск": "https://upload.wikimedia.org/wikipedia/commons/1/13/Coat_of_Arms_of_Cherkessk_%28Karachay-Cherkessia%29.png",
     "Петрозаводск": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Flag_of_Petrozavodsk_%28Karelia%29.svg/1280px-Flag_of_Petrozavodsk_%28Karelia%29.svg.png",
     "Сыктывкар": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Flag_of_Syktyvkar_%28Komia%29.svg/960px-Flag_of_Syktyvkar_%28Komia%29.svg.png",
     "Симферополь": "https://upload.wikimedia.org/wikipedia/commons/7/75/Simferopol_flag.svg",
@@ -1235,7 +1280,7 @@ const cityFlags = {
     "Йошкар-Ола": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Flag_of_Yoshkar-Ola_%28Mariy-El%29.png",
     "Саранск": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Flag_of_Saransk.svg",
     "Якутск": "https://upload.wikimedia.org/wikipedia/commons/4/40/Flag_of_Yakutsk.svg",
-    "Владикавказ": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1c/Flag_of_North_Ossetia.svg/1280px-Flag_of_North_Ossetia.svg.png",
+    "Владикавказ": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Coat_of_arms_of_Vladikavkaz.png",
     "Казань": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/Flag_of_Kazan.svg/1280px-Flag_of_Kazan.svg.png",
     "Кызыл": "https://upload.wikimedia.org/wikipedia/commons/1/18/Flag_of_Kyzyl.svg",
     "Ижевск": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Flag_of_Izhevsk_%28Udmurtia%29.svg/1280px-Flag_of_Izhevsk_%28Udmurtia%29.svg.png",
@@ -1272,7 +1317,7 @@ const cityFlags = {
     "Курск": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Flag_of_Kursk.svg/1280px-Flag_of_Kursk.svg.png",
     "Липецк": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Flag_of_Lipetsk.svg",
     "Магадан": "https://upload.wikimedia.org/wikipedia/commons/5/54/Flag_of_Magadan.svg",
-    "Мурманск": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Flag_of_Murmansk_Oblast_%28large%29.svg/1280px-Flag_of_Murmansk_Oblast_%28large%29.svg.png",
+    "Мурманск": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/RUS_Murmansk_COA.svg/960px-RUS_Murmansk_COA.svg.png",
     "Нижний Новгород": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Flag_of_Nizhny_Novgorod.svg/1280px-Flag_of_Nizhny_Novgorod.svg.png",
     "Великий Новгород": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Veliky_Novgorod.svg",
     "Новосибирск": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/Flag_of_Novosibirsk.svg/1280px-Flag_of_Novosibirsk.svg.png",
@@ -2365,32 +2410,56 @@ function loadQuizFlagRound() {
     const flagImgEl = document.getElementById('quizFlagImg');
     const flagContainerEl = document.querySelector('.quiz-flag-container');
     
-    /* 🌟 НАША ИСПРАВЛЕННАЯ СВЕРХТОЧНАЯ ЗАЩИТА НЕПАЛА: */
+    /* 🌟 ТОТАЛЬНАЯ JS-ЗАЧИСТКА ВСЕХ ВНЕШНИХ РАМОК И ПОДЛОЖЕК НЕПАЛА */
     if (currentFlagTarget.iso.toLowerCase() === 'np') {
-        flagContainerEl.style.backgroundColor = 'transparent';
-        flagImgEl.className = 'quiz-flag-img'; /* МАСШТАБ ВОЗВРАЩАЕМ: Теперь он не взорвет экран! */
-        flagImgEl.style.mixBlendMode = 'multiply'; /* Стирает белую коробку Википедии */
+        // 1. Полностью гасим фон и границы на контейнере картинки
+        if (flagContainerEl) {
+            flagContainerEl.style.setProperty('background-color', 'transparent', 'important');
+            flagContainerEl.style.setProperty('background', 'transparent', 'important');
+            flagContainerEl.style.setProperty('box-shadow', 'none', 'important');
+            flagContainerEl.style.setProperty('border', 'none', 'important');
+            
+            // Хак: Если у контейнера есть родительский элемент (внешняя карточка), гасим фон и у него
+            if (flagContainerEl.parentElement) {
+                flagContainerEl.parentElement.style.setProperty('background-color', 'transparent', 'important');
+                flagContainerEl.parentElement.style.setProperty('background', 'transparent', 'important');
+                flagContainerEl.parentElement.style.setProperty('box-shadow', 'none', 'important');
+                flagContainerEl.parentElement.style.setProperty('border', 'none', 'important');
+            }
+        }
         
-        /* ЮВЕЛИРНО УДАЛЯЕМ ЖЕСТКИЕ СЕРЫЕ КОНТУРЫ И ТЕНИ: */
-        flagImgEl.style.border = 'none';
-        flagImgEl.style.borderWidth = '0px';
-        flagImgEl.style.boxShadow = 'none';
+        // 2. Гасим прямоугольные рамки на самой картинке флага
+        flagImgEl.style.setProperty('border', 'none', 'important');
+        flagImgEl.style.setProperty('box-shadow', 'none', 'important');
+        flagImgEl.style.setProperty('background-color', 'transparent', 'important');
+        flagImgEl.style.setProperty('background', 'transparent', 'important');
+        flagImgEl.style.setProperty('mix-blend-mode', 'multiply', 'important');
+        
+        // 3. Ювелирно обводим только физический силуэт треугольников Непала
+        flagImgEl.style.setProperty('filter', 'drop-shadow(0px 0px 1px rgba(0,0,0,0.35)) drop-shadow(0px 2px 4px rgba(0,0,0,0.15))', 'important');
     } else {
-        flagContainerEl.style.backgroundColor = '#ffffff';
-        flagImgEl.className = 'quiz-flag-img';
-        flagImgEl.style.mixBlendMode = 'normal';
+        // Стандартный сплошной режим для всех остальных классических флагов мира
+        if (flagContainerEl) {
+            flagContainerEl.style.backgroundColor = '#ffffff';
+            flagContainerEl.style.boxShadow = '';
+            flagContainerEl.style.border = '';
+            
+            if (flagContainerEl.parentElement) {
+                flagContainerEl.parentElement.style.backgroundColor = '';
+                flagContainerEl.parentElement.style.boxShadow = '';
+                flagContainerEl.parentElement.style.border = '';
+            }
+        }
         
-        /* СБРАСЫВАЕМ СТИЛИ В ДЕФОЛТ ДЛЯ ОСТАЛЬНЫХ СТРАН МИРА (ЯПОНИЯ, ВАТИКАН): */
+        flagImgEl.style.mixBlendMode = 'normal';
         flagImgEl.style.border = '';
-        flagImgEl.style.borderWidth = '';
         flagImgEl.style.boxShadow = '';
+        flagImgEl.style.backgroundColor = '';
+        flagImgEl.style.filter = 'none';
     }
     
+    // 🌟 ВОЗВРАЩАЕМ ПРОПАВШУЮ МАГИЮ ГРАФИКИ:
     flagImgEl.src = highResUrl;
-
-
-
-
     
     let choices = [currentFlagTarget];
     while(choices.length < 4) {
@@ -2411,6 +2480,7 @@ function loadQuizFlagRound() {
     const bestFlag = localStorage.getItem('highScore_flags') || 0;
     document.getElementById('quizFlagStats').innerHTML = `🏆 Рекорд: ${bestFlag} &nbsp;|&nbsp; 🎯 Очки: ${flagScore} &nbsp;|&nbsp; 📋 Раунд: ${flagRound}`;
 }
+
 function checkFlagAnswer(selectedBtn, chosenName) {
     document.querySelectorAll('#quizFlagOptions .option-btn').forEach(b => b.disabled = true);
     
@@ -2590,21 +2660,19 @@ function openFlagModal(imgSrc) {
     const modalImg = document.getElementById('flagModalImg');
     modalImg.src = imgSrc;
     
-    // 🌟 Намертво возвращаем окну его родной глубокий темный цвет
     modal.style.setProperty('background-color', '#1a1a1a', 'important');
     
-    /* 🌟 ТОЧЕЧНОЕ РАСТВОРЕНИЕ БЕЛЫХ ПОЛЕЙ НЕПАЛА */
+    /* Смешивание оставляем только для Непала */
     if (imgSrc.includes('NP.svg') || imgSrc.includes('np.svg')) {
         modalImg.style.setProperty('mix-blend-mode', 'multiply', 'important');
+        modalImg.style.setProperty('background-color', 'transparent', 'important');
         modalImg.style.setProperty('opacity', '1', 'important');
     } else {
-        // 🌟 ИСПРАВЛЕНО ДЛЯ МИРОВЫХ ФЛАГОВ: сбрасываем смешивание и принудительно включаем видимость
         modalImg.style.setProperty('mix-blend-mode', 'unset', 'important');
         modalImg.style.setProperty('display', 'block', 'important');
         modalImg.style.setProperty('opacity', '1', 'important');
     }
     
-    // Убираем рамки и тени, чтобы картинка была чистой
     modalImg.style.setProperty('border', 'none', 'important');
     modalImg.style.setProperty('box-shadow', 'none', 'important');
     modalImg.style.setProperty('clip-path', 'none', 'important');
@@ -2614,7 +2682,6 @@ function openFlagModal(imgSrc) {
     modal.style.display = 'flex';
     setTimeout(() => {
         modal.classList.add('open');
-        /* 🌟 ПРАВИЛЬНОЕ СКРЫТИЕ: Мягко гасим прозрачность сайта, чтобы он не просвечивал под панелью Safari */
         const header = document.querySelector('.fixed-header');
         const container = document.querySelector('.container');
         if (header) header.classList.add('site-fade');
