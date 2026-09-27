@@ -2786,13 +2786,13 @@ function openSmartMap(capitalName, countryName) {
     let searchQuery = `${capitalName}, ${countryName}`;
     const currentCapital = capitalName.toLowerCase().trim();
     
-    // Чистый, официальный базовый путь Google Maps для cross-platform интентов
-    let baseMapsUrl = "https://www.google.com/maps/search/?api=1&";
+    // Чистый, официальный базовый путь Google Maps API
+    const baseMapsUrl = "https://www.google.com/maps/search/?api=1&";
 
-    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ ЧЕРЕЗ PLACE ID (Полная защита от выталкивания)
+    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Полная блокировка выталкивания на телефоне)
     if (currentCapital === 'джибути') {
-        // Передаем точное имя и вечный идентификатор города Джибути в базе Google
-        searchQuery = "query=Djibouti&query_place_id=ChIJv44V4Ww6AhgRbe7YF0v29-g";
+        // Передаем координаты и строгое текстовое имя города в кавычках для мобильного приложения
+        searchQuery = "query=11.589,43.145(Djibouti+City)";
     } else {
         // Список остальных городов-государств, где текстовый поиск работает отлично
         const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир'];
@@ -2803,7 +2803,6 @@ function openSmartMap(capitalName, countryName) {
         }
     }
     
-    // Сборка финального URL по стандартам Google Developers
     const finalUrl = baseMapsUrl + searchQuery;
     window.open(finalUrl, '_blank');
 }
