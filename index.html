@@ -2781,32 +2781,26 @@ function closeFlagModal() {
         modal.style.display = 'none';
     }, 50); 
 }
-/* 🌟 СВЕРХТОЧНЫЙ НАВИГАТОР: УБИРАЕТ ВЫТАЛКИВАНИЕ КАМЕРЫ НА СТРАНУ */
+/* 🌟 СВЕРХТОЧНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК */
 function openSmartMap(capitalName, countryName) {
     let searchQuery = `${capitalName}, ${countryName}`;
     const currentCapital = capitalName.toLowerCase().trim();
     
-    const protocol = "https://";
-    const subdomain = "www.";
-    const domain = "google.com";
-    const pathMaps = "/" + "m" + "a" + "p" + "s" + "/";
-    const pathSearch = "s" + "e" + "a" + "r" + "c" + "h" + "/";
-    const baseMapsUrl = protocol + subdomain + domain + pathMaps + pathSearch;
+    // 🌟 ЧЕТКИЙ И НЕОБРЕЗАННЫЙ БАЗОВЫЙ ПУТЬ GOOGLE MAPS
+    const baseMapsUrl = "https://www.google.com/maps/search/";
 
-    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ КООРДИНАТ ДЛЯ СЛОЖНЫХ СТОЛИЦ-ТЕЗОК
+    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Блокируем Zoom Out через международный индекс города)
     if (currentCapital === 'джибути') {
-        searchQuery = "11.589,43.145"; // Точные координаты центра города Джибути
-    } else if (currentCapital === 'алжир') {
-        searchQuery = "36.753,3.058";  // Точные координаты центра города Алжир
+        searchQuery = "Djibouti, Djibouti (city)"; 
     } else {
-        // Список остальных городов-государств, где приписка "город" на русском работает без выталкивания
-        const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако'];
+        // Список остальных городов-государств, где стандартный текстовый поиск работает отлично
+        const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир'];
         if (strictCities.includes(currentCapital)) {
             searchQuery = `город ${capitalName}, ${countryName}`;
         }
     }
     
-    // Формируем защищенную ссылку, которая намертво зафиксирует Zoom на городе
+    // Сборка финального URL по официальному стандарту API Google Карт
     const finalUrl = baseMapsUrl + `?api=1&query=${encodeURIComponent(searchQuery)}`;
     window.open(finalUrl, '_blank');
 }
