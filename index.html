@@ -2783,24 +2783,25 @@ function closeFlagModal() {
 }
 /* 🌟 СВЕРХТОЧНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК */
 function openSmartMap(capitalName, countryName) {
-    // 🌟 ЧЕТКИЙ И ПОЛНЫЙ БАЗОВЫЙ ПУТЬ GOOGLE MAPS ДЛЯ ПОИСКА
-    const baseMapsUrl = "https://google.com";
-    let searchQuery = `${capitalName}, ${countryName}`;
+    // 🌟 ЖЕЛЕЗНЫЙ, НЕОБРЕЗАННЫЙ И ПРАВИЛЬНЫЙ БАЗОВЫЙ ПУТЬ GOOGLE MAPS ДЛЯ ПОИСКА:
+    const baseMapsUrl = "https://www.google.com/maps/search/";
+    
+    let searchQuery = capitalName + ", " + countryName;
     const currentCapital = capitalName.toLowerCase().trim();
 
-    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Блокируем Zoom Out через привязку к центральной площади города)
+    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Блокируем Zoom Out через площадь Лагард)
     if (currentCapital === 'джибути') {
         searchQuery = "Place Lagarde, Djibouti"; 
     } else {
-        // Список остальных городов-государств, где стандартный текстовый поиск работает отлично
+        // Список остальных городов-государств, где текстовый поиск работает отлично
         const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир'];
         if (strictCities.includes(currentCapital)) {
-            searchQuery = `город ${capitalName}, ${countryName}`;
+            searchQuery = "город " + capitalName + ", " + countryName;
         }
     }
     
-    // Сборка финального URL по официальному кроссплатформенному стандарту API Google Карт
-    const finalUrl = baseMapsUrl + `?api=1&query=${encodeURIComponent(searchQuery)}`;
+    // Безопасная сборка официального URL по кроссплатформенному стандарту Google Maps API
+    const finalUrl = baseMapsUrl + "?api=1&query=" + encodeURIComponent(searchQuery);
     window.open(finalUrl, '_blank');
 }
 
