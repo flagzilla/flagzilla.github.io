@@ -2783,25 +2783,28 @@ function closeFlagModal() {
 }
 /* 🌟 СВЕРХТОЧНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК */
 function openSmartMap(capitalName, countryName) {
-    // 🌟 ЖЕЛЕЗНЫЙ, НЕОБРЕЗАННЫЙ И ПРАВИЛЬНЫЙ БАЗОВЫЙ ПУТЬ GOOGLE MAPS ДЛЯ ПОИСКА:
-    const baseMapsUrl = "https://www.google.com/maps/search/";
+    // 🌟 ВАШ ПРАВИЛЬНЫЙ, ПОЛНЫЙ И НЕОБРЕЗАННЫЙ БАЗОВЫЙ ПУТЬ К КАРТАМ:
+    let baseMapsUrl = "https://www.google.com/maps/search/";
     
-    let searchQuery = capitalName + ", " + countryName;
+    let searchQuery = "?api=1&query=" + encodeURIComponent(capitalName + ", " + countryName);
     const currentCapital = capitalName.toLowerCase().trim();
 
-    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Блокируем Zoom Out через площадь Лагард)
+    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Прижимаем камеру к городу на Zoom 15)
     if (currentCapital === 'джибути') {
-        searchQuery = "Place Lagarde, Djibouti"; 
+        // query= Place Lagarde — ставит булавку в центре города
+        // &center=11.588,43.141 — жестко центрирует экран
+        // &zoom=15 — аппаратно фиксирует масштаб улиц, запрещая отлетать до масштаба всей страны
+        searchQuery = "?api=1&query=" + encodeURIComponent("Place Lagarde, Djibouti") + "&center=11.5888,43.1419&zoom=15";
     } else {
         // Список остальных городов-государств, где текстовый поиск работает отлично
         const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир'];
         if (strictCities.includes(currentCapital)) {
-            searchQuery = "город " + capitalName + ", " + countryName;
+            searchQuery = "?api=1&query=" + encodeURIComponent("город " + capitalName + ", " + countryName);
         }
     }
     
-    // Безопасная сборка официального URL по кроссплатформенному стандарту Google Maps API
-    const finalUrl = baseMapsUrl + "?api=1&query=" + encodeURIComponent(searchQuery);
+    // Сборка финального URL через надежное сложение строк
+    const finalUrl = baseMapsUrl + searchQuery;
     window.open(finalUrl, '_blank');
 }
 
