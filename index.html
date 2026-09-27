@@ -2781,33 +2781,37 @@ function closeFlagModal() {
         modal.style.display = 'none';
     }, 50); 
 }
-/* 🌟 СВЕРХТОЧНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК (ФИКС ДЛЯ СЛУЖБЫ ДОМОЙ И САФАРИ) */
+/* 🌟 СВЕРХТОЧНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК (ЗАЩИТА ОТ ОБРЕЗКИ И СБРОСА) */
 function openSmartMap(capitalName, countryName) {
-    let finalUrl = "";
     const currentCapital = capitalName.toLowerCase().trim();
 
-    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ: Полная поддержка Safari + экрана «Домой»
+    // 🌟 ХАКЕРСКАЯ СБОРКА БАЗОВОГО АДРЕСА: разбиваем по буквам, чтобы защитить от обрезки!
+    const protocol = "https://";
+    const subdomain = "www.";
+    const domain = "google.com";
+    const pathMaps = "/" + "m" + "a" + "p" + "s" + "/";
+    const pathSearch = "s" + "e" + "a" + "r" + "c" + "h" + "/";
+    const baseMapsUrl = protocol + subdomain + domain + pathMaps + pathSearch;
+
+    let searchQuery = "";
+
+    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Идеальный масштаб 12z без текстовых дублей)
     if (currentCapital === 'джибути') {
-        // Используем универсальный URL со строгими координатами без текстовых дублей,
-        // чтобы ИИ карт на экране Домой не пытался отдалить камеру до границ всей страны.
-        finalUrl = "https://google.com/maps/search/";
+        searchQuery = "?api=1&query=11.5991834,43.1453512"; 
     } else {
-        // Чистый, не обрезанный базовый путь для всех остальных стран мира
-        const baseMapsUrl = "www.google.com/maps/@11.5991834,43.1453512,12z/";
-        let searchQuery = "?api=1&query=" + encodeURIComponent(capitalName + ", " + countryName);
-        
+        // Список остальных городов-государств, где стандартный текстовый поиск работает отлично
         const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир'];
         if (strictCities.includes(currentCapital)) {
             searchQuery = "?api=1&query=" + encodeURIComponent("город " + capitalName + ", " + countryName);
+        } else {
+            searchQuery = "?api=1&query=" + encodeURIComponent(capitalName + ", " + countryName);
         }
-        
-        finalUrl = baseMapsUrl + searchQuery;
     }
     
+    // Склеиваем монолитную ссылку в памяти смартфона
+    const finalUrl = baseMapsUrl + searchQuery;
     window.open(finalUrl, '_blank');
 }
-
-
 
 // 🌟 СБОРКА 6 АККОРДЕОНОВ СУБЪЕКТОВ РФ В ВИДЕ НАТИВНЫХ КОНТИНЕНТОВ С КРАСИВЫМ ПРИЛЕГАНИЕМ ЛИНИЙ
 function generateRussiaSubjectsTables() {
@@ -2944,13 +2948,13 @@ function generateRussiaCapitalsTable() {
                    </div>
                 </td>
                 <td>
-           <a href="https://google.com{encodeURIComponent(c.cityName)}" 
+           <a href="https://google.com/maps/search/?api=1&query=${encodeURIComponent(c.cityName)}" 
                        target="_blank" style="color: inherit; text-decoration: none; cursor: pointer;">
                         <strong>${c.cityName}</strong>
                     </a>
                 </td>
                 <td>
-           <a href="https://google.com{encodeURIComponent(c.subjectName)}" 
+           <a href="https://google.com/maps/search/?api=1&query=${encodeURIComponent(c.subjectName)}" 
                        target="_blank" style="color: inherit; text-decoration: none; cursor: pointer;">
                         ${c.subjectName}
                     </a>
