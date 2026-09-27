@@ -2783,26 +2783,27 @@ function closeFlagModal() {
 }
 /* 🌟 СВЕРХТОЧНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК */
 function openSmartMap(capitalName, countryName) {
-    // 🌟 ВАШ ЧЕТКИЙ, НАДЕЖНЫЙ И ПОЛНЫЙ БАЗОВЫЙ ПУТЬ GOOGLE MAPS
-    const baseMapsUrl = "https://google.com/maps/search/";
-    let searchQuery = capitalName + ", " + countryName;
+    // 🌟 ВАШ ПРАВИЛЬНЫЙ, ПОЛНЫЙ И НЕОБРЕЗАННЫЙ БАЗОВЫЙ ПУТЬ К КАРТАМ:
+    const baseMapsUrl = "https://www.google.com/maps/search/";
+    
+    let searchQuery = "?api=1&query=" + encodeURIComponent(capitalName + ", " + countryName);
     const currentCapital = capitalName.toLowerCase().trim();
 
-    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Идеальный средний городской масштаб)
+    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Идеальный средний масштаб города без плашек)
     if (currentCapital === 'джибути') {
-        // Передаем координаты центра города, а в скобках — красивую подпись для маркера.
-        // Google Maps откроет карту ровно в границах города Джибути без отлёта вверх!
-        searchQuery = "11.589,43.145(Djibouti+City)";
+        // Передаем координаты центра города через запятую. 
+        // Без текста и скобок Google Maps на телефоне откроет чистую карту города на среднем Zoom-расстоянии!
+        searchQuery = "?api=1&query=11.589,43.145"; 
     } else {
-        // Список остальных городов-государств, где текстовый поиск работает отлично
+        // Список остальных городов-государств, где стандартный текстовый поиск работает отлично
         const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир'];
         if (strictCities.includes(currentCapital)) {
-            searchQuery = "город " + capitalName + ", " + countryName;
+            searchQuery = "?api=1&query=" + encodeURIComponent("город " + capitalName + ", " + countryName);
         }
     }
     
-    // Сборка и открытие ссылки по единому cross-platform стандарту
-    const finalUrl = baseMapsUrl + "?api=1&query=" + encodeURIComponent(searchQuery);
+    // Сборка финального URL строго через надежное сложение строк
+    const finalUrl = baseMapsUrl + searchQuery;
     window.open(finalUrl, '_blank');
 }
 
