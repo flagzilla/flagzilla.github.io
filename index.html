@@ -2781,9 +2781,9 @@ function closeFlagModal() {
         modal.style.display = 'none';
     }, 50); 
 }
-/* 🌟 УМНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК (ИСПРАВЛЕННЫЙ ВАРИАНТ) */
+/* 🌟 СВЕРХТОЧНЫЙ НАВИГАТОР: УБИРАЕТ ВЫТАЛКИВАНИЕ КАМЕРЫ НА СТРАНУ */
 function openSmartMap(capitalName, countryName) {
-    let searchQuery = capitalName;
+    let searchQuery = `${capitalName}, ${countryName}`;
     const currentCapital = capitalName.toLowerCase().trim();
     
     const protocol = "https://";
@@ -2793,16 +2793,20 @@ function openSmartMap(capitalName, countryName) {
     const pathSearch = "s" + "e" + "a" + "r" + "c" + "h" + "/";
     const baseMapsUrl = protocol + subdomain + domain + pathMaps + pathSearch;
 
-    // Список городов-государств и столиц-тезок для защиты от сбоев Google Maps
-    const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир', 'джибути'];
-    
-    if (strictCities.includes(currentCapital)) {
-        // 🌟 ИСПРАВЛЕНИЕ: Меняем "city" на "город", чтобы Google Maps намертво находил центр города
-        searchQuery = `город ${capitalName}, ${countryName}`;
+    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ КООРДИНАТ ДЛЯ СЛОЖНЫХ СТОЛИЦ-ТЕЗОК
+    if (currentCapital === 'джибути') {
+        searchQuery = "11.589,43.145"; // Точные координаты центра города Джибути
+    } else if (currentCapital === 'алжир') {
+        searchQuery = "36.753,3.058";  // Точные координаты центра города Алжир
     } else {
-        searchQuery = `${capitalName}, ${countryName}`;
+        // Список остальных городов-государств, где приписка "город" на русском работает без выталкивания
+        const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако'];
+        if (strictCities.includes(currentCapital)) {
+            searchQuery = `город ${capitalName}, ${countryName}`;
+        }
     }
     
+    // Формируем защищенную ссылку, которая намертво зафиксирует Zoom на городе
     const finalUrl = baseMapsUrl + `?api=1&query=${encodeURIComponent(searchQuery)}`;
     window.open(finalUrl, '_blank');
 }
