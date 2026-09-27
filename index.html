@@ -2783,29 +2783,28 @@ function closeFlagModal() {
 }
 /* 🌟 СВЕРХТОЧНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК */
 function openSmartMap(capitalName, countryName) {
-    // 🌟 ВАШ ПРАВИЛЬНЫЙ, ПОЛНЫЙ И НЕОБРЕЗАННЫЙ БАЗОВЫЙ ПУТЬ К КАРТАМ:
-    const baseMapsUrl = "https://www.google.com/maps/search/";
-    
-    let searchQuery = "?api=1&query=" + encodeURIComponent(capitalName + ", " + countryName);
+    let finalUrl = "";
     const currentCapital = capitalName.toLowerCase().trim();
 
-    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Идеальный средний масштаб города без плашек)
+    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ: открываем ваш точный ракурс карты на зуме 13z
     if (currentCapital === 'джибути') {
-        // Передаем координаты центра города через запятую. 
-        // Без текста и скобок Google Maps на телефоне откроет чистую карту города на среднем Zoom-расстоянии!
-        searchQuery = "?api=1&query=11.589,43.145"; 
+        finalUrl = "https://www.google.com/maps/@11.5748003,43.1145798,13z";
     } else {
-        // Список остальных городов-государств, где стандартный текстовый поиск работает отлично
+        // Железный, не обрезанный базовый путь для всех остальных стран мира
+        const baseMapsUrl = "https://google.com/maps/search/";
+        let searchQuery = "?api=1&query=" + encodeURIComponent(capitalName + ", " + countryName);
+        
         const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир'];
         if (strictCities.includes(currentCapital)) {
             searchQuery = "?api=1&query=" + encodeURIComponent("город " + capitalName + ", " + countryName);
         }
+        
+        finalUrl = baseMapsUrl + searchQuery;
     }
     
-    // Сборка финального URL строго через надежное сложение строк
-    const finalUrl = baseMapsUrl + searchQuery;
     window.open(finalUrl, '_blank');
 }
+
 
 // 🌟 СБОРКА 6 АККОРДЕОНОВ СУБЪЕКТОВ РФ В ВИДЕ НАТИВНЫХ КОНТИНЕНТОВ С КРАСИВЫМ ПРИЛЕГАНИЕМ ЛИНИЙ
 function generateRussiaSubjectsTables() {
