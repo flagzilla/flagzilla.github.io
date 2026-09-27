@@ -324,17 +324,18 @@
             margin-bottom: 25px;
             background: transparent !important; /* Убираем фоновый прямоугольник сзади флага */
         }
-        .quiz-flag-img {
-            height: 120px;                /* Жестко фиксируем высоту на ПК для одинакового масштаба */
-            width: auto;                  /* Ширина пропорционально растянется сама по форме флага */
-            object-fit: contain;
-            border-radius: 4px;
-            /* Рамка и тень теперь обнимают СТРОГО саму ткань флага, а не пустой воздух! */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            border: 1px solid rgba(0,0,0,0.1);
-            box-sizing: border-box;
-            background-color: #ffffff;    /* Защитный слой для белых элементов флагов */
-        }
+.quiz-flag-img {
+    height: 120px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    background-color: #ffffff;
+    opacity: 0;                             /* 🌟 Скрываем флаг по умолчанию при создании раунда */
+    transition: opacity 0.12s ease-in-out;  /* 🌟 Делаем появление нового флага плавным и дорогим */
+}
      
         /* Персональная очистка Непала для квизов на ПК */
         .quiz-flag-img[src*="/NP.svg"], .quiz-flag-img[src*="np.svg"] {
@@ -643,8 +644,8 @@ tr[data-name*="иркутск"] .flag-wrapper {
      
      .quiz-panel {
          padding: 10px !important;
-         /* 🍏 БРОНЕБОЙНЫЙ ОТСТУП: Смещает флаги и вопросы вниз ровно под поисковую строку */
-         padding-top: 135px !important; 
+         /* 🍏 УМНЫЙ ОТСТУП: динамически добавляет место под челку и габариты шапки сайта */
+         padding-top: calc(env(safe-area-inset-top) + 95px) !important; 
          margin: 0px auto !important;
          border: none !important;
          box-shadow: none !important;
@@ -685,8 +686,10 @@ tr[data-name*="иркутск"] .flag-wrapper {
          background: transparent !important;
      }
      .quiz-flag-img {
-         height: 100px !important;        
+         height: 100% !important;        
          width: auto !important;          
+         opacity: 0;                             /* 🌟 Тоже прячем флаг на смартфонах */
+         transition: opacity 0.12s ease-in-out;  /* 🌟 Включаем плавное проявление на смартфонах */
      }
 
      .option-btn {
@@ -1572,7 +1575,6 @@ const russiaOkrugsData = {
         { name: "Липецкая область", capital: "Липецк" },
         { name: "Москва", capital: "Москва" },
         { name: "Московская область", capital: "Красногорск" },
-        { name: "Нижегородская область", capital: "Нижний Новгород" },
         { name: "Орловская область", capital: "Орёл" },
         { name: "Рязанская область", capital: "Рязань" },
         { name: "Смоленская область", capital: "Смоленск" },
@@ -1621,6 +1623,7 @@ const russiaOkrugsData = {
         { name: "Кировская область", capital: "Киров" },
         { name: "Республика Марий Эл", capital: "Йошкар-Ола" },
         { name: "Республика Мордовия", capital: "Саранск" },
+        { name: "Нижегородская область", capital: "Нижний Новгород" },
         { name: "Оренбургская область", capital: "Оренбург" },
         { name: "Пензенская область", capital: "Пенза" },
         { name: "Пермский край", capital: "Пермь" },
@@ -1932,6 +1935,13 @@ function createContinentBlock(continent, countries) {
     countries.forEach(c => {
         let flagSrc = getFlagUrl(c);
         const subText = c.note ? ` <span style="font-size:12px; color:#6c757d; font-weight:normal;">${c.note}</span>` : '';
+        
+        // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ: Подменяем поисковый запрос только для Приднестровья, чтобы показать границы
+        let mapQuery = c.name;
+        if (c.name.toLowerCase().trim() === 'приднестровье') {
+            mapQuery = "Административно-территориальные единицы левобережья Днестра";
+        }
+
         rowsHtml += `
             <tr data-name="${c.name.toLowerCase()}" data-capital="${c.capital.toLowerCase()}">
                 <td class="col-flag">
@@ -1940,7 +1950,7 @@ function createContinentBlock(continent, countries) {
                    </div>
                 </td>
                 <td>
-                    <a href="https://google.com/maps/search/?api=1&query=${encodeURIComponent(c.name)}" 
+                    <a href="https://google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}" 
                        target="_blank" 
                        style="color: inherit; text-decoration: none; cursor: pointer;">
                         <strong>${c.name}</strong>
@@ -2119,10 +2129,10 @@ function switchView(viewId) {
         const capContainer = document.getElementById('ruCapitalsContainer');
         if (capContainer) capContainer.style.display = 'block';
         
-        const btnOkr = document.getElementById('btnOkr');
-        const btnCap = document.getElementById('btnCap');
-        if (btnOkr) btnOkr.style.setProperty('background-color', '#f1f3f5', 'important');
-        if (btnCap) btnCap.style.setProperty('background-color', '#f1f3f5', 'important');
+const btnOkr = document.getElementById('btnOkr');
+const btnSub = document.getElementById('btnSub'); // 🌟 Исправлено на реальный id кнопки субъектов
+if (btnOkr) btnOkr.style.setProperty('background-color', '#f1f3f5', 'important');
+if (btnSub) btnSub.style.setProperty('background-color', '#f1f3f5', 'important');
 
         if (buffer) buffer.style.display = 'block';
     } else if (viewId === 'quiz-flags') {
@@ -2390,13 +2400,18 @@ setTimeout(() => {
     }
 }, 100);
 
+// 🌟 ЧЕСТНОЕ И СЛУЧАЙНОЕ ПЕРЕМЕШИВАНИЕ ВАРИАНТОВ (Алгоритм Фишера — Йетса)
 function shuffle(arr) {
-    return arr.sort(() => Math.random() - 0.5);
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]]; // Меняем элементы местами
+    }
+    return arr;
 }
 
 let flagScore = 0, flagRound = 1, currentFlagTarget;
 function loadQuizFlagRound() {
-    /* 🌟 ОБНУЛЯЕМ СЧЁТ СТРОГО ПРИ НАЖАТИИ «НАЧАТЬ ЗАНОВО» */
+    /* ОБНУЛЯЕМ СЧЁТ СТРОГО ПРИ НАЖАТИИ «НАЧАТЬ ЗАНОВО» */
     if (flagRound === 1) {
         flagScore = 0;
     }
@@ -2408,16 +2423,29 @@ function loadQuizFlagRound() {
     const flagImgEl = document.getElementById('quizFlagImg');
     const flagContainerEl = document.querySelector('.quiz-flag-container');
     
-    /* 🌟 ТОТАЛЬНАЯ JS-ЗАЧИСТКА ВСЕХ ВНЕШНИХ РАМОК И ПОДЛОЖЕК НЕПАЛА */
+    /* 🌟 МГНОВЕННО ГАСИМ КАРТИНКУ ПЕРЕД ЗАГРУЗКОЙ НОВОГО ФЛАГА */
+    flagImgEl.style.opacity = '0';
+    
+    /* 🌟 ОЖИВАЕМ КАРТИНКУ ТОЛЬКО ТОГДА, КОГДА ОНА НА 100% СКАЧАЛАСЬ ИЗ СЕТИ */
+    flagImgEl.onload = () => {
+        flagImgEl.style.opacity = '1';
+    };
+
+    /* 🌟 ЗАЩИТНЫЙ ЩИТ: Если флаг не загрузился из-за интернета, показываем заглушку, чтобы игра не висла */
+    flagImgEl.onerror = () => {
+        flagImgEl.style.opacity = '1';
+        // Ставим универсальную SVG-заглушку с вопросительным знаком внутри
+        flagImgEl.src = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='60' viewBox='0 0 100 60'><rect width='100%' height='100%' fill='%23f1f3f5'/><text x='50%' y='55%' font-family='sans-serif' font-size='32' font-weight='bold' fill='%236c757d' text-anchor='middle'>?</text></svg>";
+    };
+    
+    /* ТОТАЛЬНАЯ JS-ЗАЧИСТКА ВСЕХ ВНЕШНИХ РАМОК И ПОДЛОЖЕК НЕПАЛА */
     if (currentFlagTarget.iso.toLowerCase() === 'np') {
-        // 1. Полностью гасим фон и границы на контейнере картинки
         if (flagContainerEl) {
             flagContainerEl.style.setProperty('background-color', 'transparent', 'important');
             flagContainerEl.style.setProperty('background', 'transparent', 'important');
             flagContainerEl.style.setProperty('box-shadow', 'none', 'important');
             flagContainerEl.style.setProperty('border', 'none', 'important');
             
-            // Хак: Если у контейнера есть родительский элемент (внешняя карточка), гасим фон и у него
             if (flagContainerEl.parentElement) {
                 flagContainerEl.parentElement.style.setProperty('background-color', 'transparent', 'important');
                 flagContainerEl.parentElement.style.setProperty('background', 'transparent', 'important');
@@ -2426,17 +2454,13 @@ function loadQuizFlagRound() {
             }
         }
         
-        // 2. Гасим прямоугольные рамки на самой картинке флага
         flagImgEl.style.setProperty('border', 'none', 'important');
         flagImgEl.style.setProperty('box-shadow', 'none', 'important');
         flagImgEl.style.setProperty('background-color', 'transparent', 'important');
         flagImgEl.style.setProperty('background', 'transparent', 'important');
         flagImgEl.style.setProperty('mix-blend-mode', 'multiply', 'important');
-        
-        // 3. Ювелирно обводим только физический силуэт треугольников Непала
         flagImgEl.style.setProperty('filter', 'drop-shadow(0px 0px 1px rgba(0,0,0,0.35)) drop-shadow(0px 2px 4px rgba(0,0,0,0.15))', 'important');
     } else {
-        // Стандартный сплошной режим для всех остальных классических флагов мира
         if (flagContainerEl) {
             flagContainerEl.style.backgroundColor = '#ffffff';
             flagContainerEl.style.boxShadow = '';
@@ -2456,7 +2480,7 @@ function loadQuizFlagRound() {
         flagImgEl.style.filter = 'none';
     }
     
-    // 🌟 ВОЗВРАЩАЕМ ПРОПАВШУЮ МАГИЮ ГРАФИКИ:
+    // Запускаем асинхронное скачивание файла из Википедии
     flagImgEl.src = highResUrl;
     
     let choices = [currentFlagTarget];
@@ -2575,7 +2599,18 @@ function checkCapitalAnswer(selectedBtn, chosenCapital) {
     questionEl.style.textDecoration = 'underline';
     questionEl.style.cursor = 'pointer';
     questionEl.onclick = () => {
-        window.open(`https://google.com/maps/search/?api=1&query=${encodeURIComponent(currentCapTarget.name)}`, '_blank');
+        // 🎯 КОНСТРУКТОР ССЫЛКИ ДЛЯ КВИЗА: собираем чистый поисковый адрес API Google Maps
+        const p1 = "https://www.";
+        const p2 = "google.com";
+        const p3 = "/maps/search/";
+        const baseMapsUrl = p1 + p2 + p3;
+
+        // Если вопрос про Приднестровье, отправляем официальный термин, иначе — обычное имя страны
+        const finalQuery = currentCapTarget.name === 'Приднестровье' 
+            ? "Административно-территориальные единицы левобережья Днестра" 
+            : currentCapTarget.name;
+
+        window.open(baseMapsUrl + `?api=1&query=${encodeURIComponent(finalQuery)}`, '_blank');
     };
 
     // 🌟 ОЖИВЛЯЕМ ВАРИАНТЫ (СТОЛИЦЫ): привязываем openSmartMap к каждой кнопке
@@ -2746,23 +2781,32 @@ function closeFlagModal() {
         modal.style.display = 'none';
     }, 50); 
 }
-/* 🌟 УМНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК (С ПОДДЕРЖКОЙ МОНАКО) */
+/* 🌟 УМНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК (СТАБИЛЬНЫЙ ВАРИАНТ) */
 function openSmartMap(capitalName, countryName) {
     let searchQuery = capitalName;
+    const currentCapital = capitalName.toLowerCase().trim();
     
-    // Идеальный список городов-государств и столиц-тезок для защиты от сбоев Google Maps
-    const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако'];
+    // Кусочки ссылки для обхода автоматической обрезки текста
+    const protocol = "https://";
+    const subdomain = "www.";
+    const domain = "google.com";
+    const pathMaps = "/" + "m" + "a" + "p" + "s" + "/";
+    const pathSearch = "s" + "e" + "a" + "r" + "c" + "h" + "/";
+    const baseMapsUrl = protocol + subdomain + domain + pathMaps + pathSearch;
+
+    // Список городов-государств и столиц-тезок для защиты от сбоев Google Maps
+    const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир'];
     
-    if (strictCities.includes(capitalName.toLowerCase().trim())) {
-        // Насильно отправляем карты в городскую черту, минуя масштаб границ регионов
+    if (strictCities.includes(currentCapital)) {
+        // Насильно отправляем карты в городскую черту, минуя общие границы стран
         searchQuery = `${capitalName} city, ${countryName}`;
     } else {
-        // Дефолтный режим для всех стандартных столиц мира
+        // Дефолтный режим "Город, Страна" для всей остальной базы (включая Тирасполь)
         searchQuery = `${capitalName}, ${countryName}`;
     }
     
-    // Открываем карты в Safari / Chrome в новой вкладке
-    const finalUrl = `https://google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
+    // Открываем карты по идеально точному и защищённому URL-адресу
+    const finalUrl = baseMapsUrl + `?api=1&query=${encodeURIComponent(searchQuery)}`;
     window.open(finalUrl, '_blank');
 }
 
@@ -2883,9 +2927,10 @@ function generateRussiaCapitalsTable() {
     // Сортируем список городов строго по алфавиту от А до Я
     flatCapitalsList.sort((a, b) => a.cityName.localeCompare(b.cityName));
 
+    // 🌟 ВОЗВРАЩАЕМ СОЗДАНИЕ ВНУТРЕННЕГО БЛОКА (чтобы не ломать вкладки PWA)
     const block = document.createElement('div');
     block.className = 'continent-block collapsed';
-    block.id = 'block-ru-capital-alphabet';
+    block.id = 'block-ru-capital-alphabet'; // ID остается уникальным для поиска
     
     let rowsHtml = '';
     flatCapitalsList.forEach(c => {
@@ -2900,13 +2945,13 @@ function generateRussiaCapitalsTable() {
                    </div>
                 </td>
                 <td>
-           <a href="https://google.com/maps/search/?api=1&query=${encodeURIComponent(c.cityName)}" 
+           <a href="https://google.com{encodeURIComponent(c.cityName)}" 
                        target="_blank" style="color: inherit; text-decoration: none; cursor: pointer;">
                         <strong>${c.cityName}</strong>
                     </a>
                 </td>
                 <td>
-           <a href="https://google.com/maps/search/?api=1&query=${encodeURIComponent(c.subjectName)}" 
+           <a href="https://google.com{encodeURIComponent(c.subjectName)}" 
                        target="_blank" style="color: inherit; text-decoration: none; cursor: pointer;">
                         ${c.subjectName}
                     </a>
@@ -2914,10 +2959,11 @@ function generateRussiaCapitalsTable() {
             </tr>`;
     });
 
+    // 🌟 ИСПРАВЛЕНИЕ: У заголовка h2 внутри таблицы НЕ должно быть такого же id, как у блока!
     block.innerHTML = `
-        <h2 class="continent-header" onclick="toggleBlock('${block.id}')">
+        <h2 class="continent-header" onclick="toggleBlock('block-ru-capital-alphabet')">
             <span>Административные центры</span>
-            <span class="count-badge" id="badge-${block.id}">${flatCapitalsList.length}</span>
+            <span class="count-badge" id="badge-block-ru-capital-alphabet">${flatCapitalsList.length}</span>
         </h2>
         <div class="continent-content">
             <table>
@@ -2932,9 +2978,11 @@ function generateRussiaCapitalsTable() {
             </table>
         </div>
     `;
+    
+    // Очищаем контейнер перед добавлением, чтобы избежать дублирования
+    container.innerHTML = '';
     container.appendChild(block);
 }
-
 
 // 🌟 АВТОМАТИЧЕСКАЯ СБОРКА ТАБЛИЦ ФЕДЕРАЛЬНЫХ ОКРУГОВ РФ В ВИДЕ НАТИВНЫХ КОНТИНЕНТОВ
 function generateRussiaOkrugsTables() {
@@ -3004,7 +3052,16 @@ window.addEventListener('DOMContentLoaded', () => {
     generateRussiaOkrugsTables();
     generateRussiaCapitalsTable();
 });
-
+// 🍏 АВТОНОМНЫЙ РЕЖИМ PWA: Регистрация сервис-воркера для работы без интернета
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').then(reg => {
+            console.log('FlagZilla PWA успешно зарегистрирован в системе!', reg.scope);
+        }).catch(err => {
+            console.log('Ошибка регистрации PWA:', err);
+        });
+    });
+}
 </script>
 
 
