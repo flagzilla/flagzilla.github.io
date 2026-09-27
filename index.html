@@ -2781,11 +2781,12 @@ function closeFlagModal() {
         modal.style.display = 'none';
     }, 50); 
 }
-/* 🌟 СВЕРХТОЧНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК (ЗАЩИТА ОТ ОБРЕЗКИ И СБРОСА) */
+/* 🌟 УМНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК (СТАБИЛЬНЫЙ ВАРИАНТ) */
 function openSmartMap(capitalName, countryName) {
+    let searchQuery = capitalName;
     const currentCapital = capitalName.toLowerCase().trim();
-
-    // 🌟 ХАКЕРСКАЯ СБОРКА БАЗОВОГО АДРЕСА: разбиваем по буквам, чтобы защитить от обрезки!
+    
+    // Кусочки ссылки для обхода автоматической обрезки текста
     const protocol = "https://";
     const subdomain = "www.";
     const domain = "google.com";
@@ -2793,23 +2794,19 @@ function openSmartMap(capitalName, countryName) {
     const pathSearch = "s" + "e" + "a" + "r" + "c" + "h" + "/";
     const baseMapsUrl = protocol + subdomain + domain + pathMaps + pathSearch;
 
-    let searchQuery = "";
-
-    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Идеальный масштаб 12z без текстовых дублей)
-    if (currentCapital === 'джибути') {
-        searchQuery = "?api=1&query=11.5991834,43.1453512"; 
+    // Список городов-государств и столиц-тезок для защиты от сбоев Google Maps
+    const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир'];
+    
+    if (strictCities.includes(currentCapital)) {
+        // Насильно отправляем карты в городскую черту, минуя общие границы стран
+        searchQuery = `${capitalName} city, ${countryName}`;
     } else {
-        // Список остальных городов-государств, где стандартный текстовый поиск работает отлично
-        const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир'];
-        if (strictCities.includes(currentCapital)) {
-            searchQuery = "?api=1&query=" + encodeURIComponent("город " + capitalName + ", " + countryName);
-        } else {
-            searchQuery = "?api=1&query=" + encodeURIComponent(capitalName + ", " + countryName);
-        }
+        // Дефолтный режим "Город, Страна" для всей остальной базы (включая Тирасполь)
+        searchQuery = `${capitalName}, ${countryName}`;
     }
     
-    // Склеиваем монолитную ссылку в памяти смартфона
-    const finalUrl = baseMapsUrl + searchQuery;
+    // Открываем карты по идеально точному и защищённому URL-адресу
+    const finalUrl = baseMapsUrl + `?api=1&query=${encodeURIComponent(searchQuery)}`;
     window.open(finalUrl, '_blank');
 }
 
