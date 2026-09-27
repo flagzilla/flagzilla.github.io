@@ -2781,12 +2781,11 @@ function closeFlagModal() {
         modal.style.display = 'none';
     }, 50); 
 }
-/* 🌟 УМНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК (СТАБИЛЬНЫЙ ВАРИАНТ) */
+/* 🌟 УМНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК (ИСПРАВЛЕННЫЙ ВАРИАНТ) */
 function openSmartMap(capitalName, countryName) {
     let searchQuery = capitalName;
     const currentCapital = capitalName.toLowerCase().trim();
     
-    // Кусочки ссылки для обхода автоматической обрезки текста
     const protocol = "https://";
     const subdomain = "www.";
     const domain = "google.com";
@@ -2798,14 +2797,12 @@ function openSmartMap(capitalName, countryName) {
     const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир', 'джибути'];
     
     if (strictCities.includes(currentCapital)) {
-        // Насильно отправляем карты в городскую черту, минуя общие границы стран
-        searchQuery = `${capitalName} city, ${countryName}`;
+        // 🌟 ИСПРАВЛЕНИЕ: Меняем "city" на "город", чтобы Google Maps намертво находил центр города
+        searchQuery = `город ${capitalName}, ${countryName}`;
     } else {
-        // Дефолтный режим "Город, Страна" для всей остальной базы (включая Тирасполь)
         searchQuery = `${capitalName}, ${countryName}`;
     }
     
-    // Открываем карты по идеально точному и защищённому URL-адресу
     const finalUrl = baseMapsUrl + `?api=1&query=${encodeURIComponent(searchQuery)}`;
     window.open(finalUrl, '_blank');
 }
