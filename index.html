@@ -2795,7 +2795,7 @@ function openSmartMap(capitalName, countryName) {
     const baseMapsUrl = protocol + subdomain + domain + pathMaps + pathSearch;
 
     // Список городов-государств и столиц-тезок для защиты от сбоев Google Maps
-    const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир'];
+    const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир', 'джибути'];
     
     if (strictCities.includes(currentCapital)) {
         // Насильно отправляем карты в городскую черту, минуя общие границы стран
