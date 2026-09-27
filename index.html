@@ -2781,19 +2781,19 @@ function closeFlagModal() {
         modal.style.display = 'none';
     }, 50); 
 }
-/* 🌟 СВЕРХТОЧНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК */
+/* 🌟 СВЕРХТОЧНЫЙ НАВИГАТОР ДЛЯ КАРТ ИСКЛЮЧЕНИЙ-ТЕЗОК (ФИКС ДЛЯ СЛУЖБЫ ДОМОЙ И САФАРИ) */
 function openSmartMap(capitalName, countryName) {
     let finalUrl = "";
     const currentCapital = capitalName.toLowerCase().trim();
 
-    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ: открываем ваш точный ракурс карты на зуме 13z
-    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Идеально для браузера и экрана Домой)
+    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ: Полная поддержка Safari + экрана «Домой»
     if (currentCapital === 'джибути') {
-        // maps:// вместо https:// принудительно откроет нативное приложение карт с экрана Домой на зуме 12z
-        finalUrl = "maps://www.google.com/maps/@11.5991834,43.1453512,12z/";
+        // Используем универсальный URL со строгими координатами без текстовых дублей,
+        // чтобы ИИ карт на экране Домой не пытался отдалить камеру до границ всей страны.
+        finalUrl = "https://google.com/maps/search/";
     } else {
-        // Железный, не обрезанный базовый путь для всех остальных стран мира
-        const baseMapsUrl = "https://google.com/maps/search/";
+        // Чистый, не обрезанный базовый путь для всех остальных стран мира
+        const baseMapsUrl = "www.google.com/maps/@11.5991834,43.1453512,12z/";
         let searchQuery = "?api=1&query=" + encodeURIComponent(capitalName + ", " + countryName);
         
         const strictCities = ['гватемала', 'панама', 'сан-марино', 'люксембург', 'сингапур', 'макао', 'гонконг', 'монако', 'алжир'];
@@ -2806,6 +2806,7 @@ function openSmartMap(capitalName, countryName) {
     
     window.open(finalUrl, '_blank');
 }
+
 
 
 // 🌟 СБОРКА 6 АККОРДЕОНОВ СУБЪЕКТОВ РФ В ВИДЕ НАТИВНЫХ КОНТИНЕНТОВ С КРАСИВЫМ ПРИЛЕГАНИЕМ ЛИНИЙ
