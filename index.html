@@ -2787,8 +2787,10 @@ function openSmartMap(capitalName, countryName) {
     const currentCapital = capitalName.toLowerCase().trim();
 
     // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ: открываем ваш точный ракурс карты на зуме 13z
+    // 🎯 ТОЧЕЧНЫЙ ПЕРЕХВАТ ДЛЯ ДЖИБУТИ (Идеально для браузера и экрана Домой)
     if (currentCapital === 'джибути') {
-        finalUrl = "https://www.google.com/maps/@11.5991834,43.1453512,12z/";
+        // maps:// вместо https:// принудительно откроет нативное приложение карт с экрана Домой на зуме 12z
+        finalUrl = "maps://www.google.com/maps/@11.5991834,43.1453512,12z/";
     } else {
         // Железный, не обрезанный базовый путь для всех остальных стран мира
         const baseMapsUrl = "https://google.com/maps/search/";
